@@ -1,5 +1,5 @@
-import { byteRender } from '../../render.ts';
-import { invokeDescribeInstancesTrafficPackages } from './main.ts';
+import { byteRender } from '../render.ts';
+import { invokeDescribeInstancesTrafficPackages } from './lighthouse.ts';
 
 // TODO
 Deno.test('test-invokeDescribeInstancesTrafficPackages', async () => {
