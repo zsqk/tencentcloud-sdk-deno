@@ -16,6 +16,7 @@ import {
 } from 'https://deno.land/x/somefn@v0.6.0/js/hash.ts';
 import { secretID, secretKey } from '../constant/env.ts';
 
+// TODO: 为不同服务做准备, 改为参数
 const domain = 'lighthouse.tencentcloudapi.com';
 const service = 'lighthouse';
 
@@ -41,7 +42,7 @@ export async function invoke(apiParams: ApiParams) {
       ['Host', domain],
       ['Content-Type', contentType],
     ],
-    body: JSON.stringify(rest),
+    body,
   });
   const resBody = await res.json();
   return resBody.Response;
@@ -64,8 +65,6 @@ async function genAuthHeaders(apiParams: ApiParams, body: string) {
     await hashString('SHA-256', body), // HashedRequestPayload
   );
 
-  console.log('canonicalRequest', canonicalRequest);
-
   const date = genDateString(now);
   const credentialScope = `${date}/${service}/tc3_request`;
   const hashedCanonicalRequest = await hashString('SHA-256', canonicalRequest);
@@ -87,8 +86,6 @@ async function genAuthHeaders(apiParams: ApiParams, body: string) {
     `SignedHeaders=${signedHeaders}, `,
     `Signature=${hexString(sign)}`,
   );
-
-  console.log('auth', auth);
 
   const authParams: [string, string][] = [
     ['X-TC-Action', Action],
