@@ -21,53 +21,14 @@ const service = 'lighthouse';
 
 const contentType = 'application/json; charset=utf-8';
 
-type ApiParams = {
+export type ApiParams = {
   Action: string;
   Region: string;
   Version: string;
-  [k: string]: string | number;
+  [k: string]: unknown;
 };
 
-/**
- * 查看实例流量包详情
- * https://cloud.tencent.com/document/product/1207/48681
- */
-export async function invokeDescribeInstancesTrafficPackages(): Promise<{
-  TotalCount: number;
-  InstanceTrafficPackageSet: {
-    InstanceId: string;
-    TrafficPackageSet: {
-      TrafficPackageId: string;
-      /**已使用流量 byte */
-      TrafficUsed: number;
-      /** 总流量 byte */
-      TrafficPackageTotal: number;
-      /** 剩余流量 byte */
-      TrafficPackageRemaining: number;
-      /** 超出流量 byte */
-      TrafficOverflow: number;
-      /** e.g. 2023-03-23T06:38:59Z */
-      StartTime: string;
-      /** e.g. 2023-03-23T06:38:59Z */
-      EndTime: string;
-      /** e.g. 2023-03-23T06:38:59Z */
-      Deadline: string;
-      /** e.g. NETWORK_NORMAL */
-      Status: string;
-    }[];
-  }[];
-  RequestId: string;
-}> {
-  const apiParams: ApiParams = {
-    Action: 'DescribeInstancesTrafficPackages',
-    Version: '2020-03-24',
-    Region: 'ap-hongkong',
-  };
-  const res = await invoke(apiParams);
-  return res;
-}
-
-async function invoke(apiParams: ApiParams) {
+export async function invoke(apiParams: ApiParams) {
   const url = new URL(`https://${domain}/`);
   const { Action: _Action, Region: _Region, Version: _Version, ...rest } =
     apiParams;
